@@ -1,0 +1,157 @@
+openapi: 3.0.1
+info:
+  title: Book Shop
+  description: Book CRUD API.
+  version: 1.0.0
+servers:
+- url: /v2
+paths:
+  /user/sendUnits:
+    post:
+      summary: Send units to the user
+      operationId: sendUnits
+      requestBody:
+        description: User sending units to other user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendUnitRequest'
+        required: true
+      responses:
+        200:
+          description: User Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendUnitResponse'
+        404:
+          description: User not added
+        500:
+          description: User registeration failed
+
+  /user/receivingUnits:
+    post:
+      summary: Send units to the user
+      operationId: receivingUnits
+      requestBody:
+        description: User sending units to other user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingUnitsRequest'
+        required: true
+      responses:
+        200:
+          description: User Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceivingUnitsResponse'
+        404:
+          description: User not added
+        500:
+          description: User registeration failed
+
+  /user/getBalance:
+    get:
+      summary: Get users balance
+      operationId: getBalance
+      parameters:
+        - in: query
+          name: userName
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBalanceResponse'
+        404:
+          description: User not found
+        500:
+          description: Internal server error while getting users
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          example: Oathbringer
+        author:
+          type: string
+          example: Brandon Sanderson
+
+    RippleUse:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@axiomzen.co
+        userName:
+          type: string
+          example: Alex
+        balance:
+          type: string
+          example: 10.45
+
+    SendUnitRequest:
+        type: object
+        properties:
+          userName:
+            type: string
+            example: John
+          amount:
+            type: string
+            example: 10.45
+
+    SendUnitResponse:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: John
+        unitsSent:
+          type: string
+          example: 10.45
+
+    ReceivingUnitsRequest:
+        type: object
+        properties:
+          transactionId:
+            type: string
+          sederName:
+            type: string
+            example: John
+          amount:
+            type: string
+            example: 10.45
+
+    ReceivingUnitsResponse:
+        type: object
+        properties:
+          unitsReceived:
+            type: string
+            example: 10.45
+
+    GetBalanceResponse:
+        type: object
+        properties:
+          userName:
+            type: string
+            example: John
+          balance:
+            type: string
+            example: -10.45
+
+    RippleUsers:
+        type: array
+        items:
+          $ref: '#/components/schemas/RippleUser'
